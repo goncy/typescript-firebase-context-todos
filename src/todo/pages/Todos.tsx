@@ -40,7 +40,7 @@ const Footer = styled.a`
 
 const TodosPage = () => {
   const todos = useTodos();
-  const { add } = useTodoActions();
+  const { add, remove, update } = useTodoActions();
 
   return (
     <Layout>
@@ -50,7 +50,14 @@ const TodosPage = () => {
           {todos.length ? (
             <Todos>
               {todos.map(({ id, text, status }: ITodo) => (
-                <Todo key={id} id={id} status={status} text={text} />
+                <Todo
+                  key={id}
+                  id={id}
+                  status={status}
+                  text={text}
+                  onRemove={() => remove(id)}
+                  onUpdate={({ text, status }) => update({ id, text, status })}
+                />
               ))}
             </Todos>
           ) : (

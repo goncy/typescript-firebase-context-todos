@@ -2,8 +2,12 @@ import React from "react";
 import styled from "styled-components";
 
 import { ITodo } from "../types";
-import { useTodoActions } from "../hooks";
 import Button from "../../ui/controls/Button";
+
+interface Props extends ITodo {
+  onRemove: (id: ITodo["id"]) => void;
+  onUpdate: (todo: Pick<ITodo, "status" | "text">) => void;
+}
 
 const Container = styled.div`
   padding: 12px;
@@ -14,14 +18,15 @@ const Container = styled.div`
   justify-content: center;
 `;
 
-const Todo = ({ id, text, status }: ITodo) => {
+const Todo = ({ id, text, status, onRemove, onUpdate }: Props) => {
   const [draftText, setDraftText] = React.useState<ITodo["text"]>(text);
   const [draftStatus, setDraftStatus] = React.useState<ITodo["status"]>(status);
   const [mode, setMode] = React.useState<"view" | "edit">("view");
-  const { remove, update } = useTodoActions();
 
-  function handleUpdate() {
-    update({ id, text: draftText, status: draftStatus });
+  function handleUpdate(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+
+    onUpdate({ text: draftText, status: draftStatus });
 
     setMode("view");
   }
@@ -31,9 +36,9 @@ const Todo = ({ id, text, status }: ITodo) => {
       {mode === "view" && (
         <>
           <span onClick={() => setMode("edit")}>
-            {text} ({status})
+            <span data-testid="text">{text}</span> (<span data-testid="status">{status}</span>)
           </span>
-          <Button onClick={() => remove(id)}>
+          <Button data-testid="remove" onClick={() => onRemove(id)}>
             <span aria-label="remove todo" role="img">
               ❎
             </span>
@@ -41,18 +46,28 @@ const Todo = ({ id, text, status }: ITodo) => {
         </>
       )}
       {mode === "edit" && (
-        <>
-          <input type="text" value={draftText} onChange={e => setDraftText(e.target.value)} />
-          <select value={draftStatus} onChange={e => setDraftStatus(e.target.value as ITodo["status"])}>
+        <form onSubmit={handleUpdate}>
+          <input
+            autoFocus
+            data-testid="input"
+            type="text"
+            value={draftText}
+            onChange={e => setDraftText(e.target.value)}
+          />
+          <select
+            data-testid="select"
+            value={draftStatus}
+            onChange={e => setDraftStatus(e.target.value as ITodo["status"])}
+          >
             <option value="pending">Pending</option>
             <option value="completed">Completed</option>
           </select>
-          <Button onClick={handleUpdate}>
+          <Button data-testid="update" type="submit">
             <span aria-label="remove todo" role="img">
               ✅
             </span>
           </Button>
-        </>
+        </form>
       )}
     </Container>
   );

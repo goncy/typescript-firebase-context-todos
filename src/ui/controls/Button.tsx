@@ -1,11 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-interface Props {
-  children: JSX.Element | string;
-  onClick: (event: React.MouseEvent) => void;
-}
-
 const Container = styled.button`
   padding: 12px;
   border: none;
@@ -18,6 +13,8 @@ const Container = styled.button`
   }
 `;
 
-const Button = ({ children, ...props }: Props) => <Container {...props}>{children}</Container>;
+const Button = ({ children, ...props }: React.ButtonHTMLAttributes<HTMLButtonElement>) => (
+  <Container {...props}>{children}</Container>
+);
 
 export default Button;

@@ -4,7 +4,7 @@ import { IUser } from "../session/types";
 import { ITodo } from "./types";
 
 export default {
-  add: (user: IUser["uid"], todo: Partial<ITodo>) =>
+  add: (user: IUser["uid"], todo: Pick<ITodo, "status" | "text">) =>
     database
       .collection("users")
       .doc(user)
