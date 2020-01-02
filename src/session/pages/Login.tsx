@@ -20,7 +20,7 @@ const Container = styled.div`
 
 const LoginPage = ({ signIn, status }: Props) => (
   <Container>
-    {status === "init" && <span>Tratando de restaurar sesión...</span>}
+    {status === "init" && <span>Trying to restore session...</span>}
     {status === "restored" && <Button onClick={signIn}>Login with Google</Button>}
   </Container>
 );
