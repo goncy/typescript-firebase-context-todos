@@ -8,7 +8,7 @@ interface Props {
   children: JSX.Element;
 }
 
-const SessionContext = React.createContext<Context | null>(null);
+const SessionContext = React.createContext({} as Context);
 
 const SessionProvider = ({ children }: Props) => {
   const [user, setUser] = React.useState<IUser | null>(null);

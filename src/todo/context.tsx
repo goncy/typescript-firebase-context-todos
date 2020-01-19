@@ -10,12 +10,12 @@ interface Props {
   children: JSX.Element;
 }
 
-const TodoContext = React.createContext<Context | null>(null);
+const TodoContext = React.createContext({} as Context);
 
 const TodoProvider = ({ children }: Props) => {
   const user = useUser();
-  const [status, setStatus] = React.useState<"pending" | "resolved" | "rejected">("pending");
   const [todos, setTodos] = React.useState<ITodo[]>([]);
+  const [status, setStatus] = React.useState<"pending" | "resolved" | "rejected">("pending");
 
   function add(text: ITodo["text"]) {
     api.add(user.uid, { text, status: "pending" });
